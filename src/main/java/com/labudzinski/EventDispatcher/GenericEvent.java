@@ -1,6 +1,6 @@
-package io.brandoriented.EventDispatcher;
+package com.labudzinski.EventDispatcher;
 
-import io.brandoriented.EventDispatcher.exceptions.InvalidArgumentException;
+import com.labudzinski.EventDispatcher.exceptions.InvalidArgumentException;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,22 +1,22 @@
-package io.brandoriented.EventDispatcher;
+package com.labudzinski.EventDispatcher;
 
-import io.brandoriented.EventDispatcher.exceptions.BadMethodCallException;
+import com.labudzinski.EventDispatcher.exceptions.BadMethodCallException;
 
 public class ImmutableEventDispatcher implements EventDispatcherInterface {
 
-    private EventDispatcherInterface dispatcher;
+    private final EventDispatcherInterface dispatcher;
 
     public ImmutableEventDispatcher(EventDispatcherInterface dispatcher) {
 
         this.dispatcher = dispatcher;
     }
 
-    public Object dispatch(Object event, String eventName) {
+    public Event dispatch(Event event, String eventName) {
         return this.dispatcher.dispatch(event, eventName);
     }
 
     @Override
-    public void addListener(String eventName, Runnable listener, int priority) throws Throwable {
+    public void addListener(String eventName, EventListenerInterface listener) throws Throwable {
         throw new BadMethodCallException("Unmodifiable event dispatchers must not be modified.");
     }
 
@@ -26,7 +26,7 @@ public class ImmutableEventDispatcher implements EventDispatcherInterface {
     }
 
     @Override
-    public void removeListener(String eventName, Runnable listener) throws Throwable {
+    public void removeListener(String eventName, EventListenerInterface listener) throws Throwable {
         throw new BadMethodCallException("Unmodifiable event dispatchers must not be modified.");
     }
 
@@ -41,7 +41,7 @@ public class ImmutableEventDispatcher implements EventDispatcherInterface {
     }
 
     @Override
-    public int getListenerPriority(String eventName, Runnable listener) {
+    public Integer getListenerPriority(String eventName, EventListenerInterface listener) {
         return this.dispatcher.getListenerPriority(eventName, listener);
     }
 

@@ -1,16 +1,13 @@
-package io.brandoriented.EventDispatcher;
+package com.labudzinski.EventDispatcher;
 
-import io.brandoriented.EventDispatcher.exceptions.BadMethodCallException;
-import io.brandoriented.EventDispatcher.exceptions.InvalidArgumentException;
+import com.labudzinski.EventDispatcher.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 

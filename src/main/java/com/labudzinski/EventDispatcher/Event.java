@@ -1,4 +1,4 @@
-package io.brandoriented.EventDispatcher;
+package com.labudzinski.EventDispatcher;
 
 public class Event implements StoppableEventInterface {
 
