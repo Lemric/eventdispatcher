@@ -6,5 +6,5 @@ public interface EventListenerInterface {
 
     EventListenerImpl getListener();
 
-    Object getParameters();
+    Object[] getParameters();
 }

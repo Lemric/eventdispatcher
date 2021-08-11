@@ -230,7 +230,7 @@ class EventDispatcherTest {
         assertTrue(this.dispatcher.hasListeners(preFoo));
         assertEquals(2, listeners.size());
         String className = listeners.get(1).get(0).getListener().getClass().getTypeName();
-        className = className.replace("$1", "");
+        className = className.replace("1", "");
         assertEquals(className, TestEventSubscriberWithPriorities.class.getName());
     }
 
@@ -249,12 +249,41 @@ class EventDispatcherTest {
     public void testRemoveSubscriber() throws Throwable {
         TestEventSubscriber eventSubscriber = new TestEventSubscriber();
         this.dispatcher.addSubscriber(eventSubscriber);
-//        assertTrue(this.dispatcher.hasListeners(preFoo));
-//        assertTrue(this.dispatcher.hasListeners(postFoo));
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertTrue(this.dispatcher.hasListeners(postFoo));
         this.dispatcher.removeSubscriber(eventSubscriber);
         assertFalse(this.dispatcher.hasListeners(preFoo));
         assertFalse(this.dispatcher.hasListeners(postFoo));
     }
 
+    @Test
+    public void testRemoveSubscriberWithPriorities() throws Throwable {
+        TestEventSubscriberWithPriorities eventSubscriber = new TestEventSubscriberWithPriorities();
+        this.dispatcher.addSubscriber(eventSubscriber);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        this.dispatcher.removeSubscriber(eventSubscriber);
+        assertFalse(this.dispatcher.hasListeners(preFoo));
+    }
+
+    @Test
+    public void testRemoveSubscriberWithMultipleListeners() throws Throwable {
+        TestEventSubscriberWithMultipleListeners eventSubscriber = new TestEventSubscriberWithMultipleListeners();
+        this.dispatcher.addSubscriber(eventSubscriber);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertEquals(2, this.dispatcher.getListeners(preFoo).size());
+        this.dispatcher.removeSubscriber(eventSubscriber);
+        assertFalse(this.dispatcher.hasListeners(preFoo));
+    }
+
+    @Test
+    public void testEventReceivesTheDispatcherInstanceAsArgument() {
+        TestWithDispatcher listener = new TestWithDispatcher();
+        this.dispatcher.addListener("test", new EventListener(listener, "foo"));
+        assertNull(listener.name);
+        assertNull(listener.dispatcher);
+        this.dispatcher.dispatch(new Event(), "test");
+        assertEquals("test", listener.name);
+        assertSame(this.dispatcher, listener.dispatcher);
+    }
 
 }

@@ -215,14 +215,13 @@ public class EventDispatcher implements EventDispatcherInterface {
             }
 
             for (EventListenerInterface eventListener : listener) {
-                String method = eventListener.getMethod();
                 try {
-                    if (Objects.equals(method, "__invoke")) {
-                        eventListener.getListener().getClass().getMethod(eventListener.getMethod()).invoke(eventListener.getListener());
-                    } else {
-                        eventListener.getListener().getClass().getMethod(eventListener.getMethod(), Event.class).invoke(eventListener.getListener(), event);
+                    for (Method currentClassMethod : eventListener.getListener().getClass().getMethods()) {
+                        if (currentClassMethod.getName().equals(eventListener.getMethod())) {
+                            currentClassMethod.invoke(eventListener.getListener(), eventListener.getParameters());
+                        }
                     }
-                } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }
