@@ -1,9 +1,10 @@
 package com.labudzinski.EventDispatcher;
 
 public interface EventListenerInterface {
-    Integer getPriority();
 
     String getMethod();
+
+    EventListenerImpl getListener();
 
     Object getParameters();
 }

@@ -1,7 +1,11 @@
 package com.labudzinski.EventDispatcher;
 
+import java.util.ArrayList;
+
 public interface EventDispatcherInterface {
     void addListener(String eventName, EventListenerInterface listener) throws Throwable;
+
+    void addListener(String eventName, EventListenerInterface listener, Integer priority) throws Throwable;
 
     void addSubscriber(EventSubscriberInterface subscriber) throws Throwable;
 
@@ -9,11 +13,19 @@ public interface EventDispatcherInterface {
 
     void removeSubscriber(EventSubscriberInterface subscriber) throws Throwable;
 
-    Object getListeners(String eventName);
+    ArrayList<ArrayList<EventListenerInterface>> getListeners();
 
-    Integer getListenerPriority(String eventName, EventListenerInterface listener);
+    ArrayList<ArrayList<EventListenerInterface>> getListeners(String eventName);
+
+    ArrayList<String> getListenersAsArrayList();
+
+    ArrayList<String> getListenersAsArrayList(String eventName);
+
+    Integer getListenerPriority(String eventName, Object listener);
 
     boolean hasListeners(String eventName);
+
+    boolean hasListeners();
 
     Event dispatch(Event event, String eventName);
 }

@@ -2,6 +2,8 @@ package com.labudzinski.EventDispatcher;
 
 import com.labudzinski.EventDispatcher.exceptions.BadMethodCallException;
 
+import java.util.ArrayList;
+
 public class ImmutableEventDispatcher implements EventDispatcherInterface {
 
     private final EventDispatcherInterface dispatcher;
@@ -21,6 +23,11 @@ public class ImmutableEventDispatcher implements EventDispatcherInterface {
     }
 
     @Override
+    public void addListener(String eventName, EventListenerInterface listener, Integer priority) throws Throwable {
+        throw new BadMethodCallException("Unmodifiable event dispatchers must not be modified.");
+    }
+
+    @Override
     public void addSubscriber(EventSubscriberInterface subscriber) throws Throwable {
         throw new BadMethodCallException("Unmodifiable event dispatchers must not be modified.");
     }
@@ -36,17 +43,37 @@ public class ImmutableEventDispatcher implements EventDispatcherInterface {
     }
 
     @Override
-    public Object getListeners(String eventName) {
+    public ArrayList<ArrayList<EventListenerInterface>> getListeners() {
         return null;
     }
 
     @Override
-    public Integer getListenerPriority(String eventName, EventListenerInterface listener) {
+    public ArrayList<ArrayList<EventListenerInterface>> getListeners(String eventName) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> getListenersAsArrayList() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> getListenersAsArrayList(String eventName) {
+        return null;
+    }
+
+    @Override
+    public Integer getListenerPriority(String eventName, Object listener) {
         return this.dispatcher.getListenerPriority(eventName, listener);
     }
 
     @Override
     public boolean hasListeners(String eventName) {
         return this.dispatcher.hasListeners(eventName);
+    }
+
+    @Override
+    public boolean hasListeners() {
+        return this.hasListeners(null);
     }
 }
