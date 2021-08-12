@@ -2,6 +2,7 @@ package com.labudzinski.EventDispatcher;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,7 +10,7 @@ import java.util.logging.Logger;
 public class EventDispatcher implements EventDispatcherInterface {
 
     protected final Logger log = Logger.getLogger(getClass().getName());
-    private final HashMap<String, HashMap<Integer, ArrayList<EventListenerInterface>>> listeners = new HashMap<>();
+    private final HashMap<String, HashMap<Integer, ArrayList<ClosureRunnable>>> listeners = new HashMap<>();
 
     @Override
     public Event dispatch(Event event, String eventName) {
@@ -17,7 +18,11 @@ public class EventDispatcher implements EventDispatcherInterface {
             eventName = event.getClass().toString();
         }
 
-        ArrayList<ArrayList<EventListenerInterface>> listeners = this.getListeners(eventName);
+        String finalEventName = eventName;
+        ArrayList<ClosureRunnable> listenerList = this.getListeners(finalEventName);
+        HashMap<String, ArrayList<ClosureRunnable>> listeners = new HashMap<>() {{
+            put(finalEventName, listenerList);
+        }};
         if (!listeners.isEmpty()) {
             this.callListeners(listeners, eventName, event);
         }
@@ -27,77 +32,50 @@ public class EventDispatcher implements EventDispatcherInterface {
 
 
     @Override
-    public ArrayList<ArrayList<EventListenerInterface>> getListeners(String eventName) {
-        ArrayList<ArrayList<EventListenerInterface>> listenersArray = new ArrayList<>();
+    public ArrayList<ClosureRunnable> getListeners(String eventName) {
+        HashMap<String, ArrayList<ClosureRunnable>> listenersArray = this.getListeners();
 
-        if (!this.listeners.containsKey(eventName)) {
+        if (!listenersArray.containsKey(eventName)) {
             return new ArrayList<>();
         }
-        SortedSet<Integer> keys = new TreeSet<>(this.listeners.get(eventName).keySet());
-        for (Integer key : keys) {
-            ArrayList<EventListenerInterface> value = this.listeners.get(eventName).get(key);
-            if (value.size() > 0) {
-                listenersArray.add(value);
-            }
-        }
 
-        return listenersArray;
+        return listenersArray.get(eventName);
     }
 
-    public ArrayList<ArrayList<EventListenerInterface>> getListeners() {
-        ArrayList<ArrayList<EventListenerInterface>> listenersArray = new ArrayList<>();
-        for (Map.Entry<String, HashMap<Integer, ArrayList<EventListenerInterface>>> entry : this.listeners.entrySet()) {
-            HashMap<Integer, ArrayList<EventListenerInterface>> eventListeners = entry.getValue();
-            ArrayList<EventListenerInterface> currentEventNamedListener = new ArrayList<>();
-            TreeMap<Integer, ArrayList<EventListenerInterface>> sorted = new TreeMap<>(eventListeners);
-            for (Map.Entry<Integer, ArrayList<EventListenerInterface>> integerObjectEntry : sorted.entrySet()) {
+
+    public HashMap<String, ArrayList<ClosureRunnable>> getListeners() {
+        HashMap<String, ArrayList<ClosureRunnable>> listenersArray = new HashMap<>();
+        for (Map.Entry<String, HashMap<Integer, ArrayList<ClosureRunnable>>> entry : this.listeners.entrySet()) {
+            String eventName = entry.getKey();
+            HashMap<Integer, ArrayList<ClosureRunnable>> eventListeners = entry.getValue();
+            ArrayList<ClosureRunnable> currentEventNamedListener = new ArrayList<>();
+            NavigableMap<Integer, ArrayList<ClosureRunnable>> sorted = new TreeMap<>(eventListeners);
+            for (Map.Entry<Integer, ArrayList<ClosureRunnable>> integerObjectEntry : sorted.entrySet()) {
                 if (integerObjectEntry.getValue().size() > 0) {
                     currentEventNamedListener.addAll(integerObjectEntry.getValue());
                 }
             }
             if (currentEventNamedListener.size() > 0) {
-                listenersArray.add(currentEventNamedListener);
+                listenersArray.put(eventName, currentEventNamedListener);
             }
         }
         return listenersArray;
     }
 
-    public ArrayList<String> getListenersAsArrayList() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        for (ArrayList<EventListenerInterface> eventListenerInterfaces : this.getListeners()) {
-            for (EventListenerInterface eventListenerInterface : eventListenerInterfaces) {
-                expectedList.add(eventListenerInterface.getListener().getUuid().toString());
-            }
-        }
-
-        return expectedList;
-    }
-
-    public ArrayList<String> getListenersAsArrayList(String eventName) {
-        ArrayList<String> expectedList = new ArrayList<>();
-        for (ArrayList<EventListenerInterface> eventListenerInterfaces : this.getListeners(eventName)) {
-            for (EventListenerInterface eventListenerInterface : eventListenerInterfaces) {
-                expectedList.add(eventListenerInterface.getListener().getUuid().toString());
-            }
-        }
-
-        return expectedList;
-    }
-
     @Override
-    public Integer getListenerPriority(String eventName, Object listener) {
-        if (!this.listeners.containsKey(eventName) || this.listeners.get(eventName).isEmpty()) {
+    public Integer getListenerPriority(String eventName, ClosureRunnable listener) {
+        if(!this.hasListeners(eventName)) {
             return null;
         }
-        for (Map.Entry<Integer, ArrayList<EventListenerInterface>> integerArrayListEntry : this.listeners.get(eventName).entrySet()) {
-            Integer priority = integerArrayListEntry.getKey();
-            ArrayList<EventListenerInterface> listeners = integerArrayListEntry.getValue();
-            for (EventListenerInterface object : listeners) {
-                if (object.getListener().equals(listener)) {
-                    return priority;
-                }
+
+        for (ClosureRunnable closureRunnable : this.getListeners(eventName)) {
+            System.out.println(closureRunnable);
+            System.out.println(listener);
+            if(closureRunnable.equals(listener)) {
+                return closureRunnable.getPriority();
             }
         }
+
         return null;
     }
 
@@ -111,8 +89,8 @@ public class EventDispatcher implements EventDispatcherInterface {
             return this.listeners.containsKey(eventName) && this.getListeners(eventName).size() > 0;
         }
 
-        for (ArrayList<EventListenerInterface> eventListeners : this.getListeners()) {
-            if (eventListeners.size() > 0) {
+        for (Map.Entry<String, ArrayList<ClosureRunnable>> stringArrayListEntry : this.getListeners().entrySet()) {
+            if (stringArrayListEntry.getValue().size() > 0) {
                 return true;
             }
         }
@@ -120,19 +98,24 @@ public class EventDispatcher implements EventDispatcherInterface {
         return false;
     }
 
-    public void addListener(String eventName, EventListenerInterface listener) {
+    public void addListener(String eventName, ClosureRunnable listener) {
         this.addListener(eventName, listener, 0);
     }
 
-    public void addListener(String eventName, EventListenerInterface listener, Integer priority) {
+    public void addListener(String eventName, ClosureRunnable listener, Integer priority) {
 
         if (!this.listeners.containsKey(eventName)) {
             this.listeners.put(eventName, new HashMap<>());
         }
 
-        HashMap<Integer, ArrayList<EventListenerInterface>> currentListenersByEventName = this.listeners.get(eventName);
-        currentListenersByEventName.computeIfAbsent(priority, k -> new ArrayList<>());
+        HashMap<Integer, ArrayList<ClosureRunnable>> currentListenersByEventName = this.listeners.get(eventName);
+        if(!currentListenersByEventName.containsKey(priority)) {
+            currentListenersByEventName.put(priority, new ArrayList<>());
+        }
+        listener.setPriority(priority);
         currentListenersByEventName.get(priority).add(listener);
+
+        this.listeners.put(eventName, currentListenersByEventName);
     }
 
     protected boolean equalsListeners(Object o, Object that) {
@@ -154,18 +137,18 @@ public class EventDispatcher implements EventDispatcherInterface {
     }
 
     @Override
-    public void removeListener(String eventName, EventListenerInterface listener) throws Throwable {
+    public void removeListener(String eventName, ClosureRunnable listener) throws Throwable {
         if (!this.hasListeners(eventName)) {
             return;
         }
-        for (Map.Entry<Integer, ArrayList<EventListenerInterface>> integerArrayListEntry : this.listeners.get(eventName).entrySet()) {
+        for (Map.Entry<Integer, ArrayList<ClosureRunnable>> integerArrayListEntry : this.listeners.get(eventName).entrySet()) {
             Integer priority = integerArrayListEntry.getKey();
-            ArrayList<EventListenerInterface> listeners = integerArrayListEntry.getValue();
+            ArrayList<ClosureRunnable> listeners = integerArrayListEntry.getValue();
 
-            for (EventListenerInterface v : new ArrayList<>(listeners)) {
-                if (this.equalsListeners(v.getListener(), listener.getListener())) {
+            for (ClosureRunnable v : new ArrayList<>(listeners)) {
+                if (this.equalsListeners(v, listener)) {
                     this.listeners.get(eventName).get(priority).remove(v);
-                    log.log(Level.INFO, "Remove {2} event ({0}) from priority ({1})", new String[]{eventName, String.valueOf(priority), v.getListener().getName()});
+                    log.log(Level.INFO, "Remove {2} event ({0}) from priority ({1})", new String[]{eventName, String.valueOf(priority), v.getClass().getName()});
                 }
             }
             if (this.listeners.get(eventName).get(priority).size() == 0) {
@@ -181,12 +164,12 @@ public class EventDispatcher implements EventDispatcherInterface {
 
     @Override
     public void addSubscriber(EventSubscriberInterface subscriber) {
-        for (Map.Entry<String, ArrayList<EventListenerInterface>> entry : subscriber.getSubscribedEvents().entrySet()) {
+        for (Map.Entry<String, ArrayList<ClosureRunnable>> entry : subscriber.getSubscribedEvents().entrySet()) {
             String eventName = entry.getKey();
-            ArrayList<EventListenerInterface> calls = entry.getValue();
-            for (EventListenerInterface call : calls) {
-                if (call.getListener() instanceof EventSubscriberImpl) {
-                    EventSubscriberImpl currentSubscriber = (EventSubscriberImpl) call.getListener();
+            ArrayList<ClosureRunnable> calls = entry.getValue();
+            for (ClosureRunnable call : calls) {
+                if (call instanceof EventSubscriberImpl) {
+                    EventSubscriberImpl currentSubscriber = (EventSubscriberImpl) call;
                     this.addListener(eventName, call, currentSubscriber.getPriority());
                 } else {
                     this.addListener(eventName, call, 0);
@@ -197,35 +180,40 @@ public class EventDispatcher implements EventDispatcherInterface {
 
     @Override
     public void removeSubscriber(EventSubscriberInterface subscriber) throws Throwable {
-        for (Map.Entry<String, ArrayList<EventListenerInterface>> stringArrayListEntry : subscriber.getSubscribedEvents().entrySet()) {
+        for (Map.Entry<String, ArrayList<ClosureRunnable>> stringArrayListEntry : subscriber.getSubscribedEvents().entrySet()) {
             String eventName = stringArrayListEntry.getKey();
-            ArrayList<EventListenerInterface> currentListeners = stringArrayListEntry.getValue();
-            for (EventListenerInterface currentListener : currentListeners) {
+            ArrayList<ClosureRunnable> currentListeners = stringArrayListEntry.getValue();
+            for (ClosureRunnable currentListener : currentListeners) {
                 this.removeListener(eventName, currentListener);
             }
         }
     }
 
-    protected void callListeners(ArrayList<ArrayList<EventListenerInterface>> listeners, String eventName, Event event) {
+    protected void callListeners(HashMap<String, ArrayList<ClosureRunnable>> listeners, String eventName, Event event) {
         boolean stoppable = event != null;
 
-        for (ArrayList<EventListenerInterface> listener : listeners) {
-            if (stoppable && (event).isPropagationStopped()) {
-                break;
-            }
+        for (Map.Entry<String, ArrayList<ClosureRunnable>> stringArrayListEntry : listeners.entrySet()) {
+            ArrayList<ClosureRunnable> listener = stringArrayListEntry.getValue();
+            for (ClosureRunnable eventListener : listener) {
+                System.out.println("listener: " + eventListener.getClosure().key);
+                System.out.println("stoppable: " + (stoppable && (event).isPropagationStopped()));
+                if (stoppable && (event).isPropagationStopped()) {
+                    return;
+                }
 
-            for (EventListenerInterface eventListener : listener) {
                 try {
-                    for (Method currentClassMethod : eventListener.getListener().getClass().getMethods()) {
+                    for (Method currentClassMethod : eventListener.getClosure().getClass().getMethods()) {
                         if (currentClassMethod.getName().equals(eventListener.getMethod())) {
-                            currentClassMethod.invoke(eventListener.getListener(), eventListener.getParameters());
+                            System.out.println(currentClassMethod.getName());
+                            currentClassMethod.invoke(eventListener.getClosure(), event);
                         }
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
+                System.out.println("stoppable: " + (stoppable && (event).isPropagationStopped()));
             }
         }
-    }
 
+    }
 }

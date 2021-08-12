@@ -23,5 +23,5 @@ public interface EventSubscriberInterface {
      *
      * @return array<string, mixed> The event names to listen to
      */
-    Map<String, ArrayList<EventListenerInterface>> getSubscribedEvents();
+    Map<String, ArrayList<ClosureRunnable>> getSubscribedEvents();
 }

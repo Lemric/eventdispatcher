@@ -7,40 +7,12 @@ import java.util.UUID;
 
 public class TestEventSubscriberWithMultipleListeners implements EventSubscriberInterface {
     @Override
-    public Map<String, ArrayList<EventListenerInterface>> getSubscribedEvents() {
+    public Map<String, ArrayList<ClosureRunnable>> getSubscribedEvents() {
         return new HashMap<>() {{
             put("pre.foo", new ArrayList<>() {{
-                add(new EventListener(new EventSubscriberImpl() {
-                    @Override
-                    public Integer getPriority() {
-                        return 0;
-                    }
-
-                    @Override
-                    public UUID getUuid() {
-                        return UUID.randomUUID();
-                    }
-
-                    @Override
-                    public String getName() {
-                        return null;
-                    }
+                add(new ClosureRunnable(new Closure() {
                 }, "preFoo1"));
-                add(new EventListener(new EventSubscriberImpl() {
-                    @Override
-                    public Integer getPriority() {
-                        return 10;
-                    }
-
-                    @Override
-                    public UUID getUuid() {
-                        return UUID.randomUUID();
-                    }
-
-                    @Override
-                    public String getName() {
-                        return null;
-                    }
+                add(new ClosureRunnable(new Closure() {
                 }, "preFoo2"));
             }});
         }};
