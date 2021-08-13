@@ -368,21 +368,16 @@ class EventDispatcherTest {
         assertSame(2, called[0]);
     }
 
+    @Test
     public void testRemoveFindsLazyListeners() throws Throwable {
         TestWithDispatcher test = new TestWithDispatcher();
-        ClosureInterface factory = new Closure() {
-            public Event foo(Event event) {
-                return event;
-            }
-        };
-
-        this.dispatcher.addListener("foo", new ClosureRunnable(factory, "foo"));
+        this.dispatcher.addListener("foo", new ClosureRunnable(test, "foo"));
         assertTrue(this.dispatcher.hasListeners("foo"));
         this.dispatcher.removeListener("foo", new ClosureRunnable(test, "foo"));
         assertFalse(this.dispatcher.hasListeners("foo"));
         this.dispatcher.addListener("foo", new ClosureRunnable(test, "foo"));
         assertTrue(this.dispatcher.hasListeners("foo"));
-        this.dispatcher.removeListener("foo", new ClosureRunnable(factory, "foo"));
+        this.dispatcher.removeListener("foo", new ClosureRunnable(test, "foo"));
         assertFalse(this.dispatcher.hasListeners("foo"));
     }
 
