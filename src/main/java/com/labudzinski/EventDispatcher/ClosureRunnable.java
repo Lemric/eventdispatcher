@@ -1,32 +1,32 @@
 package com.labudzinski.EventDispatcher;
 
+import com.labudzinski.EventDispatcher.util.HashCode;
+
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 public class ClosureRunnable {
-    private Closure closure;
+    private ClosureInterface closure;
     private String method = null;
     private Integer priority = 0;
 
-    private Object[] parameters;
+    private Object[] parameters = null;
 
-    public ClosureRunnable(Closure closure) {
+    public ClosureRunnable(ClosureInterface closure) {
         this.setConstructor(closure, null, null);
     }
 
-    public ClosureRunnable(Closure closure, String method) {
+    public ClosureRunnable(ClosureInterface closure, String method) {
         this.setConstructor(closure, method, null);
     }
 
-    public ClosureRunnable(Closure closure, String method, Integer priority) {
+    public ClosureRunnable(ClosureInterface closure, String method, Integer priority) {
         this.setConstructor(closure, method, priority);
     }
 
-    private void setConstructor(Closure closure, String method, Integer priority) {
+    private void setConstructor(ClosureInterface closure, String method, Integer priority) {
         this.closure = closure;
         this.method = method;
         this.priority = (priority == null) ? 0 : priority;
-
         try {
             this.hasMethod(closure);
         } catch (NoSuchMethodException e) {
@@ -34,10 +34,10 @@ public class ClosureRunnable {
         }
     }
 
-    private void hasMethod(Closure closure) throws NoSuchMethodException {
-        if(this.method == null) {
-            for (Method currentMethod : closure.getClass().getMethods()) {
-                if(currentMethod.getName().equals("invoke")) {
+    private void hasMethod(ClosureInterface closureInterface) throws NoSuchMethodException {
+        if (this.method == null) {
+            for (Method currentMethod : closureInterface.getClass().getMethods()) {
+                if (currentMethod.getName().equals("invoke")) {
                     this.method = "invoke";
                     return;
                 }
@@ -45,8 +45,8 @@ public class ClosureRunnable {
             return;
         }
 
-        for (Method currentMethod : closure.getClass().getMethods()) {
-            if(currentMethod.getName().equals(this.method)) {
+        for (Method currentMethod : closureInterface.getClass().getMethods()) {
+            if (currentMethod.getName().equals(this.method)) {
                 return;
             }
         }
@@ -54,7 +54,7 @@ public class ClosureRunnable {
         throw new NoSuchMethodException();
     }
 
-    public Closure getClosure() {
+    public ClosureInterface getClosure() {
         return closure;
     }
 
@@ -76,8 +76,7 @@ public class ClosureRunnable {
         if (o == null || getClass() != o.getClass()) return false;
         ClosureRunnable that = (ClosureRunnable) o;
 
-        return that.closure.equals(closure) && method == that.method &&
-                priority.equals(that.priority);
+        return that.closure.hashCode() == closure.hashCode();
     }
 
     public Object[] getParameters() {
@@ -86,5 +85,15 @@ public class ClosureRunnable {
 
     public void setParameters(Object[] parameters) {
         this.parameters = parameters;
+    }
+
+    public int hashCode() {
+        HashCode h = new HashCode();
+        h.addValue(this.getClosure());
+        h.addValue(this.getMethod());
+        if (this.getParameters() != null) {
+            h.addValue(this.getParameters());
+        }
+        return h.hashCode();
     }
 }

@@ -3,7 +3,6 @@ package com.labudzinski.EventDispatcher;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class TestEventSubscriberWithPriorities implements EventSubscriberInterface {
     @Override
@@ -11,10 +10,14 @@ public class TestEventSubscriberWithPriorities implements EventSubscriberInterfa
         return new HashMap<>() {{
             put("pre.foo", new ArrayList<>() {{
                 add(new ClosureRunnable(new Closure() {
+                    public void preFoo(Event event) {
+                    }
                 }, "preFoo", 10));
             }});
             put("post.foo", new ArrayList<>() {{
                 add(new ClosureRunnable(new Closure() {
+                    public void postFoo(Event event) {
+                    }
                 }, "postFoo"));
             }});
         }};

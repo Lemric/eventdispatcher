@@ -1,24 +1,22 @@
 package com.labudzinski.EventDispatcher;
 
-import java.util.UUID;
+import com.labudzinski.EventDispatcher.events.Dispatcher;
 
-public class TestWithDispatcher implements EventListenerImpl {
+public class TestWithDispatcher extends Closure {
     public String name;
     public Object dispatcher;
     public boolean invoked = false;
 
-    public void foo(Object e, String name, Object dispatcher) {
-        this.name = name;
-        this.dispatcher = dispatcher;
+    public void foo(Dispatcher event) {
+        System.out.println("Foo");
+        this.name = event.getName();
+        this.dispatcher = event.getDispatcher();
     }
 
-    @Override
-    public UUID getUuid() {
-        return UUID.randomUUID();
-    }
-
-    @Override
-    public String getName() {
-        return null;
+    public void invoke(Dispatcher event) {
+        System.out.println("Invoke");
+        this.name = event.getName();
+        this.invoked = true;
+        this.dispatcher = event.getDispatcher();
     }
 }

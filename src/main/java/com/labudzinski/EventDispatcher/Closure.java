@@ -1,9 +1,20 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.labudzinski.EventDispatcher;
 
-import com.fasterxml.uuid.Generators;
+import com.labudzinski.EventDispatcher.util.HashCode;
 
-import java.util.UUID;
-
-public interface Closure {
-    public UUID key = Generators.randomBasedGenerator().generate();
+public class Closure implements ClosureInterface {
+    @Override
+    public int hashCode() {
+        HashCode h = new HashCode();
+        h.addValue(this.getClass().getMethods());
+        return h.hashCode();
+    }
 }

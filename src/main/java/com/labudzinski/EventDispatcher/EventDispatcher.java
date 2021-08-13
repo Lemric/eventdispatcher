@@ -2,8 +2,11 @@ package com.labudzinski.EventDispatcher;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,12 +52,14 @@ public class EventDispatcher implements EventDispatcherInterface {
             String eventName = entry.getKey();
             HashMap<Integer, ArrayList<ClosureRunnable>> eventListeners = entry.getValue();
             ArrayList<ClosureRunnable> currentEventNamedListener = new ArrayList<>();
-            NavigableMap<Integer, ArrayList<ClosureRunnable>> sorted = new TreeMap<>(eventListeners);
-            for (Map.Entry<Integer, ArrayList<ClosureRunnable>> integerObjectEntry : sorted.entrySet()) {
+            List<Entry<Integer, ArrayList<ClosureRunnable>>> sortedEntries = new ArrayList<>(eventListeners.entrySet());
+            sortedEntries.sort((e1, e2) -> e2.getKey().compareTo(e1.getKey()));
+            for (Entry<Integer, ArrayList<ClosureRunnable>> integerObjectEntry : sortedEntries) {
                 if (integerObjectEntry.getValue().size() > 0) {
                     currentEventNamedListener.addAll(integerObjectEntry.getValue());
                 }
             }
+
             if (currentEventNamedListener.size() > 0) {
                 listenersArray.put(eventName, currentEventNamedListener);
             }
@@ -64,15 +69,17 @@ public class EventDispatcher implements EventDispatcherInterface {
 
     @Override
     public Integer getListenerPriority(String eventName, ClosureRunnable listener) {
-        if(!this.hasListeners(eventName)) {
+        if (!this.hasListeners(eventName)) {
             return null;
         }
+        HashMap<Integer, ArrayList<ClosureRunnable>> listeners = this.listeners.get(eventName);
+        for (Entry<Integer, ArrayList<ClosureRunnable>> integerArrayListEntry : listeners.entrySet()) {
+            Integer priority = integerArrayListEntry.getKey();
 
-        for (ClosureRunnable closureRunnable : this.getListeners(eventName)) {
-            System.out.println(closureRunnable);
-            System.out.println(listener);
-            if(closureRunnable.equals(listener)) {
-                return closureRunnable.getPriority();
+            for (ClosureRunnable closureRunnable : integerArrayListEntry.getValue()) {
+                if (closureRunnable.equals(listener)) {
+                    return priority;
+                }
             }
         }
 
@@ -118,27 +125,10 @@ public class EventDispatcher implements EventDispatcherInterface {
         this.listeners.put(eventName, currentListenersByEventName);
     }
 
-    protected boolean equalsListeners(Object o, Object that) {
-        if (that == o) return true;
-        if (o == null) return false;
-        if (!that.getClass().getName().equals(o.getClass().getName())) return false;
-
-        for (Method method : that.getClass().getMethods()) {
-            try {
-                o.getClass().getMethod(method.getName(), method.getParameterTypes());
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     @Override
     public void removeListener(String eventName, ClosureRunnable listener) throws Throwable {
         if (!this.hasListeners(eventName)) {
+            System.out.println("LISTENERS NOT EXISTS");
             return;
         }
         for (Map.Entry<Integer, ArrayList<ClosureRunnable>> integerArrayListEntry : this.listeners.get(eventName).entrySet()) {
@@ -146,11 +136,14 @@ public class EventDispatcher implements EventDispatcherInterface {
             ArrayList<ClosureRunnable> listeners = integerArrayListEntry.getValue();
 
             for (ClosureRunnable v : new ArrayList<>(listeners)) {
-                if (this.equalsListeners(v, listener)) {
+                System.out.println(v.hashCode() + ":" + listener.hashCode());
+                System.out.println(v.getClosure().hashCode() + ":" + listener.getClosure().hashCode());
+                if (v.equals(listener)) {
                     this.listeners.get(eventName).get(priority).remove(v);
                     log.log(Level.INFO, "Remove {2} event ({0}) from priority ({1})", new String[]{eventName, String.valueOf(priority), v.getClass().getName()});
                 }
             }
+
             if (this.listeners.get(eventName).get(priority).size() == 0) {
                 this.listeners.get(eventName).put(priority, new ArrayList<>());
                 log.log(Level.INFO, "Remove all event ({0}) from priority ({1})", new String[]{eventName, String.valueOf(priority)});
@@ -168,9 +161,8 @@ public class EventDispatcher implements EventDispatcherInterface {
             String eventName = entry.getKey();
             ArrayList<ClosureRunnable> calls = entry.getValue();
             for (ClosureRunnable call : calls) {
-                if (call instanceof EventSubscriberImpl) {
-                    EventSubscriberImpl currentSubscriber = (EventSubscriberImpl) call;
-                    this.addListener(eventName, call, currentSubscriber.getPriority());
+                if (call instanceof ClosureInterface) {
+                    this.addListener(eventName, call, call.getPriority());
                 } else {
                     this.addListener(eventName, call, 0);
                 }
@@ -195,8 +187,6 @@ public class EventDispatcher implements EventDispatcherInterface {
         for (Map.Entry<String, ArrayList<ClosureRunnable>> stringArrayListEntry : listeners.entrySet()) {
             ArrayList<ClosureRunnable> listener = stringArrayListEntry.getValue();
             for (ClosureRunnable eventListener : listener) {
-                System.out.println("listener: " + eventListener.getClosure().key);
-                System.out.println("stoppable: " + (stoppable && (event).isPropagationStopped()));
                 if (stoppable && (event).isPropagationStopped()) {
                     return;
                 }
@@ -204,14 +194,12 @@ public class EventDispatcher implements EventDispatcherInterface {
                 try {
                     for (Method currentClassMethod : eventListener.getClosure().getClass().getMethods()) {
                         if (currentClassMethod.getName().equals(eventListener.getMethod())) {
-                            System.out.println(currentClassMethod.getName());
                             currentClassMethod.invoke(eventListener.getClosure(), event);
                         }
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-                System.out.println("stoppable: " + (stoppable && (event).isPropagationStopped()));
             }
         }
 
