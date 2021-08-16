@@ -64,8 +64,8 @@ class EventDispatcherTest {
         this.dispatcher.addListener(preFoo, new ClosureRunnable(listener2, "preFoo"), 10);
         this.dispatcher.addListener(preFoo, new ClosureRunnable(listener3, "preFoo"));
 
-        HashMap<String, ArrayList<ClosureRunnable>> expected = new HashMap<>() {{
-            put(preFoo, new ArrayList<>() {{
+        HashMap<String, ArrayList<ClosureRunnable>> expected = new HashMap<String, ArrayList<ClosureRunnable>>() {{
+            put(preFoo, new ArrayList<ClosureRunnable>() {{
                 add(new ClosureRunnable(listener2, "preFoo", 10));
                 add(new ClosureRunnable(listener3, "preFoo", 0));
                 add(new ClosureRunnable(listener1, "preFoo", -10));
@@ -92,13 +92,13 @@ class EventDispatcherTest {
         this.dispatcher.addListener(postFoo, new ClosureRunnable(listener5));
         this.dispatcher.addListener(postFoo, new ClosureRunnable(listener6), 10);
 
-        HashMap<String, ArrayList<ClosureRunnable>> expected = new HashMap<>() {{
-            put(preFoo, new ArrayList<>() {{
+        HashMap<String, ArrayList<ClosureRunnable>> expected = new HashMap<String, ArrayList<ClosureRunnable>>() {{
+            put(preFoo, new ArrayList<ClosureRunnable>() {{
                 add(new ClosureRunnable(listener3, null, 10));
                 add(new ClosureRunnable(listener2));
                 add(new ClosureRunnable(listener1, null, -10));
             }});
-            put(postFoo, new ArrayList<>() {{
+            put(postFoo, new ArrayList<ClosureRunnable>() {{
                 add(new ClosureRunnable(listener6, null, 10));
                 add(new ClosureRunnable(listener5));
                 add(new ClosureRunnable(listener4, null, -10));
@@ -408,17 +408,17 @@ class EventDispatcherTest {
         };
 
         this.dispatcher.addListener("foo", new ClosureRunnable(factory, "foo"), 3);
-        assertThat(this.dispatcher.getListeners("foo")).usingRecursiveComparison().isEqualTo(new ArrayList<>() {{
+        assertThat(this.dispatcher.getListeners("foo")).usingRecursiveComparison().isEqualTo(new ArrayList<Object>() {{
             add(new ClosureRunnable(factory, "foo", 3));
         }});
 
         this.dispatcher.removeListener("foo", new ClosureRunnable(test, "foo"));
         this.dispatcher.addListener("bar", new ClosureRunnable(factory, "foo"), 3);
         assertThat(this.dispatcher.getListeners()).usingRecursiveComparison().isEqualTo(new HashMap<String, Object>() {{
-            put("foo", new ArrayList<>() {{
+            put("foo", new ArrayList<Object>() {{
                 add(new ClosureRunnable(factory, "foo", 3));
             }});
-            put("bar", new ArrayList<>() {{
+            put("bar", new ArrayList<Object>() {{
                 add(new ClosureRunnable(factory, "foo", 3));
             }});
         }});

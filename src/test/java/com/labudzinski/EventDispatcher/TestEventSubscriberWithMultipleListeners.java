@@ -7,8 +7,8 @@ import java.util.Map;
 public class TestEventSubscriberWithMultipleListeners implements EventSubscriberInterface {
     @Override
     public Map<String, ArrayList<ClosureRunnable>> getSubscribedEvents() {
-        return new HashMap<>() {{
-            put("pre.foo", new ArrayList<>() {{
+        return new HashMap<String, ArrayList<ClosureRunnable>>() {{
+            put("pre.foo", new ArrayList<ClosureRunnable>() {{
                 add(new ClosureRunnable(new Closure() {
                     public void preFoo1(Event event) {
                     }

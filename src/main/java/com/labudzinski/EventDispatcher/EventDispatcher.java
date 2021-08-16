@@ -23,7 +23,7 @@ public class EventDispatcher implements EventDispatcherInterface {
 
         String finalEventName = eventName;
         ArrayList<ClosureRunnable> listenerList = this.getListeners(finalEventName);
-        HashMap<String, ArrayList<ClosureRunnable>> listeners = new HashMap<>() {{
+        HashMap<String, ArrayList<ClosureRunnable>> listeners = new HashMap<String, ArrayList<ClosureRunnable>>() {{
             put(finalEventName, listenerList);
         }};
         if (!listeners.isEmpty()) {
