@@ -1,6 +1,7 @@
 package com.labudzinski.EventDispatcher;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public interface EventSubscriberInterface {
@@ -23,5 +24,5 @@ public interface EventSubscriberInterface {
      *
      * @return array<string, mixed> The event names to listen to
      */
-    Map<String, ArrayList<ClosureRunnable>> getSubscribedEvents();
+    Map<String, List<EventListener<? extends Event>>> getSubscribedEvents();
 }

@@ -1,5 +1,7 @@
 package com.labudzinski.EventDispatcher;
 
+import com.labudzinski.EventDispatcher.util.HashCode;
+
 public class Event implements StoppableEventInterface {
 
     private boolean propagationStopped = false;
@@ -10,7 +12,9 @@ public class Event implements StoppableEventInterface {
     }
 
     @Override
+
     public void stopPropagation() {
         this.propagationStopped = true;
     }
+
 }

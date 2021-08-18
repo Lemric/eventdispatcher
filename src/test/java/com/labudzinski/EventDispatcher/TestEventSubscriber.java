@@ -2,23 +2,19 @@ package com.labudzinski.EventDispatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TestEventSubscriber implements EventSubscriberInterface {
     @Override
-    public Map<String, ArrayList<ClosureRunnable>> getSubscribedEvents() {
-        return new HashMap<String, ArrayList<ClosureRunnable>>() {{
-            put("pre.foo", new ArrayList<ClosureRunnable>() {{
-                add(new ClosureRunnable(new Closure() {
-                    public void preFoo(Event event) {
-                    }
-                }, "preFoo"));
+    public Map<String, List<EventListener<? extends Event>>> getSubscribedEvents() {
+        TestEventListener listener = new TestEventListener();
+        return new HashMap<String, List<EventListener<? extends Event>>>() {{
+            put("pre.foo", new ArrayList<EventListener<? extends Event>>() {{
+                add(listener);
             }});
-            put("post.foo", new ArrayList<ClosureRunnable>() {{
-                add(new ClosureRunnable(new Closure() {
-                    public void postFoo(Event event) {
-                    }
-                }, "postFoo"));
+            put("post.foo", new ArrayList<EventListener<? extends Event>>() {{
+                add(listener);
             }});
         }};
     }

@@ -1,26 +1,34 @@
 package com.labudzinski.EventDispatcher;
 
-public class TestEventListener implements ClosureInterface {
+import com.labudzinski.EventDispatcher.util.HashCode;
+
+import java.util.function.Consumer;
+
+public class TestEventListener extends EventListener<Event> {
     public boolean preFooInvoked = false;
     public boolean postFooInvoked = false;
 
     /* Listener methods */
 
-    public void preFoo(Event event) {
-        preFooInvoked = true;
+    public Consumer<Event> preFoo() {
+        return (event) -> preFooInvoked = true;
     }
 
-    public void postFoo(Event event)
+    public Consumer<Event> postFoo()
     {
-        postFooInvoked = true;
+        return (event) -> {
+            postFooInvoked = true;
 
-        if (!preFooInvoked) {
-            event.stopPropagation();
-        }
+            if (!preFooInvoked) {
+                event.stopPropagation();
+            }
+        };
     }
 
-    public void invoke()
-    {
+    @Override
+    protected Consumer<Event> onEvent() {
+        return null;
     }
+
 }
 

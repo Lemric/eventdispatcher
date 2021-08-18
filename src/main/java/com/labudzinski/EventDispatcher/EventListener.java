@@ -1,43 +1,60 @@
-//package com.labudzinski.EventDispatcher;
-//
-//public class EventListener implements EventListenerInterface {
-//
-//    private final Object listener;
-//    private final String method;
-//    private final Object[] parameters;
-//
-//    public EventListener(EventListenerImpl listener) {
-//        this.listener = listener;
-//        this.method = "invoke";
-//        this.parameters = null;
-//    }
-//
-//    public EventListener(Object listener, String method) {
-//        this.listener = listener;
-//        this.method = method;
-//        this.parameters = null;
-//    }
-//
-//    public EventListener(EventListenerImpl listener,
-//                         String method,
-//                         Object[] parameters) {
-//        this.listener = listener;
-//        this.method = method;
-//        this.parameters = parameters;
-//    }
-//
-//    @Override
-//    public String getMethod() {
-//        return this.method;
-//    }
-//
-//    @Override
-//    public EventListenerImpl getListener() {
-//        return this.listener;
-//    }
-//
-//    @Override
-//    public Object[] getParameters() {
-//        return this.parameters;
-//    }
-//}
+package com.labudzinski.EventDispatcher;
+
+import com.labudzinski.EventDispatcher.util.HashCode;
+
+import java.util.function.Consumer;
+
+/**
+ * A class representing the listener of an event.
+ * The consumer (supplied through constructor or via overloading of the #onEvent method) will be executed when the event is raised.
+ *
+ * The priority can be used to execute this listener before others, the listener with the highest priority will be executed first.
+ *
+ * @author Laniax
+ */
+public class EventListener<T extends Event> {
+
+    private Consumer<T> consumer;
+    private int priority;
+
+    public EventListener() {
+        this(null);
+    }
+
+    public EventListener(Consumer<T> consumer) {
+        this(consumer, 0);
+    }
+
+    public EventListener(Consumer<T> consumer, int priority) {
+        this.consumer = consumer;
+        this.priority = priority;
+    }
+
+    /**
+     * Returns a Consumer that is trigger when the event is raised.
+     * @return
+     */
+    protected Consumer<T> onEvent() {
+        return null;
+    }
+
+    public void invoke(T event) {
+
+        if (this.consumer == null)
+            this.consumer = onEvent();
+
+        if (this.consumer == null)
+            throw new RuntimeException("No consumer was specified for the event listener. Supply one in the contructor or override the #onEvent method.");
+
+        this.consumer.accept(event);
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int value) {
+        priority = value;
+    }
+
+}
