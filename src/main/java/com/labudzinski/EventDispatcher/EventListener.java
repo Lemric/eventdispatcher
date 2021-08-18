@@ -53,8 +53,9 @@ public class EventListener<T extends Event> {
         return priority;
     }
 
-    public void setPriority(int value) {
+    public EventListener setPriority(int value) {
         priority = value;
+        return this;
     }
 
 }
