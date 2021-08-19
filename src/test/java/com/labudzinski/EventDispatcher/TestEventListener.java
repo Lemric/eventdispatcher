@@ -4,29 +4,39 @@ import com.labudzinski.EventDispatcher.util.HashCode;
 
 import java.util.function.Consumer;
 
-public class TestEventListener extends EventListener<Event> {
+public class TestEventListener  {
     public boolean preFooInvoked = false;
     public boolean postFooInvoked = false;
 
     /* Listener methods */
 
-    public Consumer<Event> preFoo() {
-        return (event) -> preFooInvoked = true;
+    public Event preFoo(Event event) {
+        System.out.println("PreFoo");
+        preFooInvoked = true;
+
+        return null;
     }
 
-    public Consumer<Event> postFoo()
+    public Event preFoo() {
+        System.out.println("PreFoo");
+        preFooInvoked = true;
+
+        return null;
+    }
+
+    public Event postFoo(Event event)
     {
-        return (event) -> {
-            postFooInvoked = true;
+        System.out.println("PostFoo");
+        postFooInvoked = true;
+        System.out.println(preFooInvoked);
+        if (!preFooInvoked) {
+            event.stopPropagation();
+        }
 
-            if (!preFooInvoked) {
-                event.stopPropagation();
-            }
-        };
+        return event;
     }
 
-    @Override
-    protected Consumer<Event> onEvent() {
+    protected Event onEvent() {
         return null;
     }
 

@@ -8,13 +8,34 @@
 
 package com.labudzinski.EventDispatcher;
 
+import com.labudzinski.EventDispatcher.events.Dispatcher;
 import com.labudzinski.EventDispatcher.util.HashCode;
 
-public class Closure implements ClosureInterface {
+import java.util.concurrent.Callable;
+
+public abstract class Closure<V> implements Callable {
+
+    private int priority;
+    private Event event;
+
     @Override
     public int hashCode() {
         HashCode h = new HashCode();
-        h.addValue(this.getClass().getMethods());
+        h.addValue(event);
         return h.hashCode();
+    }
+
+    public abstract Object call();
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

@@ -3,6 +3,7 @@ package com.labudzinski.EventDispatcher;
 import com.labudzinski.EventDispatcher.util.HashCode;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * A class representing the listener of an event.

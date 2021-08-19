@@ -4,25 +4,23 @@ import com.labudzinski.EventDispatcher.events.Dispatcher;
 
 import java.util.function.Consumer;
 
-public class TestWithDispatcher extends EventListener<Event> {
+public class TestWithDispatcher {
     public String name;
     public Object dispatcher;
     public boolean invoked = false;
 
-    public Consumer<Dispatcher> foo() {
-        return (event) -> {
-            System.out.println("Foo");
-            this.name = event.getName();
-            this.dispatcher = event.getDispatcher();
-        };
+    public Dispatcher foo(Dispatcher event) {
+        this.name = event.getName();
+        this.dispatcher = event.getDispatcher();
+
+        return event;
     }
 
-    public Consumer<Dispatcher>  invoke() {
-        return (event) -> {
-            System.out.println("Invoke");
-            this.name = event.getName();
-            this.invoked = true;
-            this.dispatcher = event.getDispatcher();
-        };
+    public Dispatcher onEvent(Dispatcher event) {
+        this.name = event.getName();
+        this.invoked = true;
+        this.dispatcher = event.getDispatcher();
+
+        return event;
     }
 }

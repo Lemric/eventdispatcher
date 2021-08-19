@@ -4,7 +4,7 @@ public interface EventListenerInterface {
 
     String getMethod();
 
-    EventListenerImpl getListener();
+    Object getListener();
 
     Object[] getParameters();
 }
