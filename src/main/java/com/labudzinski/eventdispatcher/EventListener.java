@@ -1,9 +1,8 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.util.HashCode;
+import com.labudzinski.eventdispatchercontracts.Event;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * A class representing the listener of an event.

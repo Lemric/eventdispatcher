@@ -1,6 +1,7 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.exceptions.InvalidArgumentException;
+import com.labudzinski.eventdispatcher.exceptions.InvalidArgumentException;
+import com.labudzinski.eventdispatchercontracts.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

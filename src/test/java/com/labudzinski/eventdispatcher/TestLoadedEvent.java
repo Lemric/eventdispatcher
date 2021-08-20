@@ -1,4 +1,6 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
+
+import com.labudzinski.eventdispatchercontracts.Event;
 
 public class TestLoadedEvent extends Event {
     private final Boolean testLoaded;

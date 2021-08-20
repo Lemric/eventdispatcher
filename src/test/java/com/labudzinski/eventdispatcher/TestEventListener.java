@@ -1,24 +1,18 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.util.HashCode;
-
-import java.util.function.Consumer;
+import com.labudzinski.eventdispatchercontracts.Event;
 
 public class TestEventListener  {
     public boolean preFooInvoked = false;
     public boolean postFooInvoked = false;
 
-    /* Listener methods */
-
     public Event preFoo(Event event) {
-        System.out.println("PreFoo");
         preFooInvoked = true;
 
-        return null;
+        return event;
     }
 
     public Event preFoo() {
-        System.out.println("PreFoo");
         preFooInvoked = true;
 
         return null;
@@ -26,9 +20,7 @@ public class TestEventListener  {
 
     public Event postFoo(Event event)
     {
-        System.out.println("PostFoo");
         postFooInvoked = true;
-        System.out.println(preFooInvoked);
         if (!preFooInvoked) {
             event.stopPropagation();
         }
@@ -39,6 +31,5 @@ public class TestEventListener  {
     protected Event onEvent() {
         return null;
     }
-
 }
 

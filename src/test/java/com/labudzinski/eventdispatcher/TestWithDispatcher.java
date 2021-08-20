@@ -1,8 +1,6 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.events.Dispatcher;
-
-import java.util.function.Consumer;
+import com.labudzinski.eventdispatcher.events.Dispatcher;
 
 public class TestWithDispatcher {
     public String name;

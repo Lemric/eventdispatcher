@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.labudzinski.EventDispatcher.util;
+package com.labudzinski.eventdispatcher.util;
 
 public class Dumper {
 }

@@ -1,4 +1,4 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
 public interface StoppableEventInterface {
     boolean isPropagationStopped();

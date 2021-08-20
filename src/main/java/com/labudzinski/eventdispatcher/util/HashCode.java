@@ -1,4 +1,4 @@
-package com.labudzinski.EventDispatcher.util;
+package com.labudzinski.eventdispatcher.util;
 
 /**
  * Helper class for computing hash codes.

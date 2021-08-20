@@ -1,6 +1,7 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.exceptions.InvalidArgumentException;
+import com.labudzinski.eventdispatcher.exceptions.InvalidArgumentException;
+import com.labudzinski.eventdispatchercontracts.Event;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,6 +1,8 @@
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.events.Dispatcher;
+import com.labudzinski.eventdispatcher.events.Dispatcher;
+import com.labudzinski.eventdispatchercontracts.Event;
+import com.labudzinski.eventdispatchercontracts.EventListenerInterface;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -112,29 +114,14 @@ class EventDispatcherTest {
         TestEventListener listener1 = new TestEventListener();
         TestEventListener listener2 = new TestEventListener();
 
-        Closure listenerA = new Closure() {
-            @Override
-            public Event call() {
-                return listener1.onEvent();
-            }
-        };
+        EventListenerInterface listenerA = () -> listener1.onEvent();
         this.dispatcher.addListener(preFoo, listenerA, -10);
-        Closure listenerB = new Closure() {
-            @Override
-            public Event call() {
-                return listener2.onEvent();
-            }
-        };
+        EventListenerInterface listenerB = () -> listener2.onEvent();
         this.dispatcher.addListener(preFoo, listenerB);
         assertSame(-10, this.dispatcher.getListenerPriority(preFoo, listenerA));
         assertSame(0, this.dispatcher.getListenerPriority(preFoo, listenerB));
-        assertNull(this.dispatcher.getListenerPriority(preBar,listener2::onEvent));
-        assertNull(this.dispatcher.getListenerPriority(preFoo, new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        }));
+        assertNull(this.dispatcher.getListenerPriority(preBar, listener2::onEvent));
+        assertNull(this.dispatcher.getListenerPriority(preFoo, () -> null));
     }
 
     @Test
@@ -154,7 +141,7 @@ class EventDispatcherTest {
     @Test
     public void testDispatchForClosure() {
         final int[] invoked = {0};
-        Callable listener = () -> {
+        EventListenerInterface listener = () -> {
             invoked[0]++;
             return null;
         };
@@ -179,26 +166,17 @@ class EventDispatcherTest {
     @Test
     public void testDispatchByPriority() {
         final ArrayList<Integer> invoked = new ArrayList<>();
-        Closure listener1 = new Closure<>() {
-            @Override
-            public Event call() {
-                invoked.add(1);
-                return null;
-            }
+        EventListenerInterface listener1 = (EventListenerInterface<Event>) () -> {
+            invoked.add(1);
+            return null;
         };
-        Closure listener2 = new Closure<>() {
-            @Override
-            public Event call() {
-                invoked.add(2);
-                return null;
-            }
+        EventListenerInterface listener2 = (EventListenerInterface<Event>) () -> {
+            invoked.add(2);
+            return null;
         };
-        Closure listener3 = new Closure<>() {
-            @Override
-            public Event call() {
-                invoked.add(3);
-                return null;
-            }
+        EventListenerInterface listener3 = (EventListenerInterface<Event>) () -> {
+            invoked.add(3);
+            return null;
         };
 
         this.dispatcher.addListener(preFoo, listener1, -10);
@@ -210,12 +188,7 @@ class EventDispatcherTest {
 
     @Test
     public void testRemoveListener() throws Throwable {
-        Closure listener = new Closure() {
-            @Override
-            public Event call() {
-                return EventDispatcherTest.this.listener.onEvent();
-            }
-        };
+        EventListenerInterface listener = () -> EventDispatcherTest.this.listener.onEvent();
         this.dispatcher.addListener(preBar, listener);
         assertTrue(this.dispatcher.hasListeners(preBar));
         this.dispatcher.removeListener(preBar, listener);
@@ -228,12 +201,7 @@ class EventDispatcherTest {
     public void testEventReceivesTheDispatcherInstanceAsArgument() {
         TestWithDispatcher listener = new TestWithDispatcher();
         Dispatcher event = new Dispatcher("test", this.dispatcher);
-        this.dispatcher.addListener("test", new Closure() {
-            @Override
-            public Event call() {
-                return listener.foo(event);
-            }
-        });
+        this.dispatcher.addListener("test", () -> listener.foo(event));
         assertNull(listener.name);
         assertNull(listener.dispatcher);
         this.dispatcher.dispatch(event, "test");
@@ -242,34 +210,8 @@ class EventDispatcherTest {
     }
 
     @Test
-    public void testWorkaroundForPhpBug62976() {
-        ChildEventDispatcher dispatcher = new ChildEventDispatcher();
-        Closure listener = new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        };
-        Closure listener2 = new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        };
-
-        dispatcher.addListener("bug.62976", listener);
-        dispatcher.removeListener("bug.62976",listener2);
-        assertTrue(dispatcher.hasListeners("bug.62976"));
-    }
-
-    @Test
     public void testHasListenersWhenAddedCallbackListenerIsRemoved() throws Throwable {
-        Closure listener = new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        };
+        EventListenerInterface listener = () -> null;
         this.dispatcher.addListener("foo", listener);
         this.dispatcher.removeListener("foo", listener);
         assertFalse(this.dispatcher.hasListeners());
@@ -278,12 +220,7 @@ class EventDispatcherTest {
     @Test
     public void testGetListenersWhenAddedCallbackListenerIsRemoved() throws Throwable {
 
-        Closure listener = new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        };
+        EventListenerInterface listener = () -> null;
         this.dispatcher.addListener("foo", listener);
         this.dispatcher.removeListener("foo", listener);
         assertThat(new ArrayList<>()).isEqualTo(this.dispatcher.getListeners());
@@ -299,12 +236,9 @@ class EventDispatcherTest {
     @Test
     public void testHasListenersIsLazy() {
         final int[] called = {0};
-        Closure listener = new Closure() {
-            @Override
-            public Event call() {
-                ++called[0];
-                return null;
-            }
+        EventListenerInterface listener = () -> {
+            ++called[0];
+            return null;
         };
 
         this.dispatcher.addListener("foo", listener);
@@ -317,12 +251,9 @@ class EventDispatcherTest {
     public void testDispatchLazyListener() {
         final int[] called = {0};
         TestWithDispatcher dispatcher = new TestWithDispatcher();
-        Closure factory = new Closure() {
-            @Override
-            public TestWithDispatcher call() {
-                ++called[0];
-                return dispatcher;
-            }
+        EventListenerInterface factory = () -> {
+            ++called[0];
+            return dispatcher;
         };
 
         this.dispatcher.addListener("foo", factory);
@@ -344,12 +275,7 @@ class EventDispatcherTest {
     public void testRemoveFindsLazyListeners() throws Throwable {
         TestWithDispatcher test = new TestWithDispatcher();
         Dispatcher event = new Dispatcher();
-        Closure factory = new Closure() {
-            @Override
-            public Dispatcher call() {
-                return test.foo(event);
-            }
-        };
+        EventListenerInterface factory = () -> test.foo(event);
         this.dispatcher.addListener("foo", factory);
         assertTrue(this.dispatcher.hasListeners("foo"));
         this.dispatcher.removeListener("foo", factory);
@@ -363,12 +289,7 @@ class EventDispatcherTest {
     @Test
     public void testPriorityFindsLazyListeners() {
         TestWithDispatcher test = new TestWithDispatcher();
-        Closure factory = new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        };
+        EventListenerInterface factory = () -> null;
 
         this.dispatcher.addListener("foo", factory, 3);
         assertSame(3, this.dispatcher.getListenerPriority("foo", factory));
@@ -381,12 +302,7 @@ class EventDispatcherTest {
     @Test
     public void testGetLazyListeners() throws Throwable {
         TestWithDispatcher test = new TestWithDispatcher();
-        Closure factory = new Closure() {
-            @Override
-            public Event call() {
-                return null;
-            }
-        };
+        EventListenerInterface factory = () -> null;
 
         this.dispatcher.addListener("foo", factory, 3);
         assertThat(this.dispatcher.getListeners("foo")).usingRecursiveComparison().isEqualTo(new ArrayList<Object>() {{
@@ -406,18 +322,10 @@ class EventDispatcherTest {
         final Boolean[] testLoaded = {false};
         Event event = new Event();
         TestEventListener test = new TestEventListener();
-        Closure factory = new Closure() {
-            @Override
-            public Event call() {
-                return test.postFoo(event);
-            }
-        };
-        Closure factory2 = new Closure() {
-            @Override
-            public Event call() {
-                testLoaded[0] = true;
-                return test.preFoo(event);
-            }
+        EventListenerInterface factory = () -> test.postFoo(event);
+        EventListenerInterface factory2 = () -> {
+            testLoaded[0] = true;
+            return test.preFoo(event);
         };
         this.dispatcher.addListener("foo", factory);
         this.dispatcher.addListener("foo", factory2);
@@ -428,8 +336,13 @@ class EventDispatcherTest {
         assertFalse(test.preFooInvoked);
 
         assertSame(0, this.dispatcher.getListenerPriority("foo", factory2));
-        test.preFoo(new Event());
-        this.dispatcher.dispatch(new Event(), "foo");
+        Event event2 = null;
+        try {
+            event2 = (Event) factory2.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.dispatcher.dispatch(event2, "foo");
 
         assertTrue(testLoaded[0]);
     }

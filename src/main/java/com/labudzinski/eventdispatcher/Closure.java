@@ -6,16 +6,13 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.labudzinski.EventDispatcher;
+package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.EventDispatcher.events.Dispatcher;
-import com.labudzinski.EventDispatcher.util.HashCode;
+import com.labudzinski.eventdispatcher.util.HashCode;
+import com.labudzinski.eventdispatchercontracts.Event;
+import com.labudzinski.eventdispatchercontracts.EventListenerInterface;
 
-import java.util.concurrent.Callable;
-
-public abstract class Closure<V> implements Callable {
-
-    private int priority;
+public abstract class Closure<V> implements EventListenerInterface {
     private Event event;
 
     @Override
@@ -27,15 +24,7 @@ public abstract class Closure<V> implements Callable {
 
     public abstract Object call();
 
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setEvent(Object event) {
+        this.event = (Event) event;
     }
 }
