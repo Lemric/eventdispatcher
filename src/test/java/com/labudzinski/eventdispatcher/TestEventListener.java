@@ -31,5 +31,13 @@ public class TestEventListener  {
     protected Event onEvent() {
         return null;
     }
+
+    public Object onEvent(Object o) {
+        return null;
+    }
+
+    public Object preFoo(Object o) {
+        return null;
+    }
 }
 

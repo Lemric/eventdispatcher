@@ -22,11 +22,8 @@ public class EventDispatcher implements EventDispatcherInterface {
                     return event;
                 }
                 Object result = null;
-                if (listener instanceof Closure) {
-                    listener.setEvent(event);
-                }
                 try {
-                    result = listener.call();
+                    result = listener.call(event);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
