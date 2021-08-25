@@ -12,15 +12,13 @@ public class EventDispatcher implements EventDispatcherInterface {
     private final HashMap<String, HashMap<Integer, List<EventListenerInterface>>> listeners = new HashMap<>();
 
     public <T extends Event> T dispatch(T event, String eventName) {
-
         List<EventListenerInterface> listeners = getListeners(eventName);
-
         if (listeners.size() > 0) {
-
             for (EventListenerInterface listener : listeners) {
                 if (event.isPropagationStopped()) {
                     return event;
                 }
+
                 Object result = null;
                 try {
                     result = listener.call(event);
@@ -40,7 +38,6 @@ public class EventDispatcher implements EventDispatcherInterface {
                 }
             }
         }
-
         return event;
     }
 

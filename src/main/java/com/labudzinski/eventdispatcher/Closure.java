@@ -23,8 +23,4 @@ public abstract class Closure<V> implements EventListenerInterface {
     }
 
     public abstract Object call();
-
-    public void setEvent(Object event) {
-        this.event = (Event) event;
-    }
 }

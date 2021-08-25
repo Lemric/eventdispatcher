@@ -127,7 +127,7 @@ class EventDispatcherTest {
     @Test
     public void testDispatch() {
         Event event = new Event();
-        this.dispatcher.addListener(preFoo, listener::preFoo);
+        this.dispatcher.addListener(preFoo, (eee) -> listener.preFoo());
         this.dispatcher.addListener(postFoo, (eee) -> listener.postFoo(event));
         this.dispatcher.dispatch(event, preFoo);
         assertTrue(this.listener.preFooInvoked);
@@ -335,13 +335,14 @@ class EventDispatcherTest {
         assertFalse(test.preFooInvoked);
 
         assertSame(0, this.dispatcher.getListenerPriority("foo", factory2));
-        Event event2 = null;
+        Event event2 = new Event();
         try {
             event2 = (Event) factory2.call(event2);
+            this.dispatcher.dispatch(event2, "foo");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.dispatcher.dispatch(event2, "foo");
+
 
         assertTrue(testLoaded[0]);
     }

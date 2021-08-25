@@ -6,7 +6,7 @@
 
     <groupId>com.labudzinski</groupId>
     <artifactId>eventdispatcher</artifactId>
-    <version>0.0.0-g</version>
+    <version>0.0.1-g</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.labudzinski</groupId>
             <artifactId>eventdispatchercontracts</artifactId>
-            <version>0.0.0-g</version>
+            <version>1.0.0-g</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
