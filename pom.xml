@@ -60,4 +60,11 @@
             <url>https://repo.repsy.io/mvn/labudzinski/default</url>
         </repository>
     </distributionManagement>
+    <repositories>
+        <repository>
+            <id>repsy</id>
+            <name>Labudzinski</name>
+            <url>https://repo.repsy.io/mvn/labudzinski/default</url>
+        </repository>
+    </repositories>
 </project>
