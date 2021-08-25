@@ -55,27 +55,9 @@
     </dependencies>
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub release</name>
-            <url>file:///home/dominik/Repository/maven-repository</url>
+            <id>repsy</id>
+            <name>Labudzinski</name>
+            <url>https://repo.repsy.io/mvn/labudzinski/default</url>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>github</id>
-            <name>GitHub release</name>
-            <url>https://raw.github.com/labudzinski/maven-packages/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
