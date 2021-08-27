@@ -31,5 +31,5 @@ public interface EventSubscriberInterface {
      *
      * @return array<string, mixed> The event names to listen to
      */
-    Map<String, Map<EventListenerInterface<?>, Integer>> getSubscribedEvents();
+    Map<String, Map<EventListenerInterface<Event>, Integer>> getSubscribedEvents();
 }

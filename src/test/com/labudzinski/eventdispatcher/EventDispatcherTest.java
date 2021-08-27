@@ -263,6 +263,15 @@ class EventDispatcherTest {
         assertEquals(2, listeners.size());
     }
 
+    @Test
+    public void testRealSubscriberWithMultipleListeners() {
+        EventSubscriberInterface eventSubscriber = new TestRealEventSubscriber();
+        this.dispatcher.addSubscriber(eventSubscriber);
+
+        List<EventListenerInterface> listeners = this.dispatcher.getListeners(preFoo);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertEquals(3, listeners.size());
+    }
 
     @Test
     public void testEventReceivesTheDispatcherInstanceAsArgument() {

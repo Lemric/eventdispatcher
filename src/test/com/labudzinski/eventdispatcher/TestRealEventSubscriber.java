@@ -11,13 +11,29 @@ package com.labudzinski.eventdispatcher;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestEventSubscriberWithMultipleListeners implements EventSubscriberInterface {
+public class TestRealEventSubscriber implements EventSubscriberInterface {
+    public static Event onKernelResponsePre(Event event) {
+        // ...
+        return event;
+    }
+
+    public static Event onKernelResponsePost(Event event) {
+        // ...
+        return event;
+    }
+
+    public static Event onStoreOrder(Event event) {
+        // ...
+        return event;
+    }
+
     @Override
     public Map<String, Map<EventListenerInterface<Event>, Integer>> getSubscribedEvents() {
         return new HashMap<>() {{
             put("pre.foo", new HashMap<>() {{
-                put((event) -> null, 0);
-                put((event) -> null, 10);
+                put(TestRealEventSubscriber::onKernelResponsePre, 0);
+                put(TestRealEventSubscriber::onKernelResponsePost, 0);
+                put(TestRealEventSubscriber::onStoreOrder, -10);
             }});
         }};
     }

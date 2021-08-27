@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class TestEventSubscriber implements EventSubscriberInterface {
     @Override
-    public Map<String, Map<EventListenerInterface<?>, Integer>> getSubscribedEvents() {
+    public Map<String, Map<EventListenerInterface<Event>, Integer>> getSubscribedEvents() {
         return new HashMap<>() {{
             put("pre.foo", new HashMap<>() {{
                 put((event) -> null, 0);
