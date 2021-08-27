@@ -153,4 +153,19 @@ public class EventDispatcher implements EventDispatcherInterface {
         }
     }
 
+    public void addSubscriber(EventSubscriberInterface subscriber) {
+        subscriber.getSubscribedEvents().forEach((eventName, listeners) -> {
+            listeners.forEach((listener, priority) -> {
+                this.addListener(eventName, listener, priority);
+            });
+        });
+    }
+
+    public void removeSubscriber(EventSubscriberInterface subscriber) {
+        subscriber.getSubscribedEvents().forEach((eventName, listeners) -> {
+            listeners.forEach((listener, priority) -> {
+                this.removeListener(eventName, listener);
+            });
+        });
+    }
 }

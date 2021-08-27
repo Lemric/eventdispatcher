@@ -8,24 +8,13 @@
 
 package com.labudzinski.eventdispatcher;
 
-import java.util.List;
-
 public interface EventDispatcherInterface {
+    /**
+     * Dispatches an event to all registered listeners.
+     *
+     * @param event     T      The event to pass to the event handlers/listeners
+     * @param eventName String The name of the event to dispatch. If not supplied, the class of $event should be used instead.
+     * @return <T extends Event> The passed event MUST be returned
+     */
     <T extends Event> T dispatch(T event, String eventName);
-
-    EventDispatcherInterface addListener(String eventName, EventListenerInterface listener);
-
-    EventDispatcherInterface addListener(String eventName, EventListenerInterface listener, Integer priority);
-
-    boolean hasListeners();
-
-    boolean hasListeners(String eventName);
-
-    List<EventListenerInterface> getListeners();
-
-    List<EventListenerInterface> getListeners(String eventName);
-
-    Integer getListenerPriority(String eventName, EventListenerInterface listener);
-
-    void removeListener(String eventName, EventListenerInterface listener);
 }

@@ -8,7 +8,6 @@
 
 package com.labudzinski.eventdispatcher;
 
-import java.util.List;
 import java.util.Map;
 
 @FunctionalInterface
@@ -25,12 +24,12 @@ public interface EventSubscriberInterface {
      * <p>
      * For instance:
      * <p>
-     * * ['eventName' => ['methodName', $priority]]
+     * * ["eventName" => [[EventListenerInterface, priority]]]
      * <p>
      * The code must not depend on runtime state as it will only be called at compile time.
      * All logic depending on runtime state must be put into the individual methods handling the events.
      *
      * @return array<string, mixed> The event names to listen to
      */
-    Map<String, Map<Integer, List<EventListenerInterface>>> getSubscribedEvents();
+    Map<String, Map<EventListenerInterface, Integer>> getSubscribedEvents();
 }
