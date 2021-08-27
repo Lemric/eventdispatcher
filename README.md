@@ -1,12 +1,13 @@
-# event-dispatcher
+# com.labudzinski.eventdispatcher
 
-[![CI](https://github.com/labudzinski/event-dispatcher/actions/workflows/maven.yml/badge.svg)](https://github.com/labudzinski/event-dispatcher/actions/workflows/maven.yml) [![CircleCI](https://circleci.com/gh/labudzinski/eventdispatcher/tree/master.svg?style=svg)](https://circleci.com/gh/labudzinski/eventdispatcher/tree/master)
+[![Java CI with Maven](https://github.com/labudzinski/eventdispatcher/actions/workflows/maven.yml/badge.svg)](https://github.com/labudzinski/eventdispatcher/actions/workflows/maven.yml)
+[![CircleCI](https://circleci.com/gh/labudzinski/eventdispatcher/tree/master.svg?style=svg)](https://circleci.com/gh/labudzinski/eventdispatcher/tree/master)
 
 ### Events
 
-When an event is dispatched, it’s identified by a unique name (e.g. kernel.response), which any number of listeners
-might be listening to. An com.labudzinski.eventdispatcher.Event instance is also created and passed to all of the
-listeners. As you’ll see later, the Event object itself often contains data about the event being dispatched.
+When an event is dispatched, it’s identified by a unique name (e.g. foo.action), which any number of listeners might be
+listening to. An com.labudzinski.eventdispatcher.Event instance is also created and passed to all of the listeners. As
+you’ll see later, the Event object itself often contains data about the event being dispatched.
 
 ### The Dispatcher
 
