@@ -1,6 +1,14 @@
+/*
+ * Copyright (c) 2021.
+ * This file is part of the com.labudzinski package.
+ * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
+ * @author Dominik Labudzinski <dominik@labudzinski.com>
+ *
+ */
+
 package com.labudzinski.eventdispatcher;
 
-public class TestEventListener  {
+public class TestEventListener {
     public boolean preFooInvoked = false;
     public boolean postFooInvoked = false;
 
@@ -16,8 +24,7 @@ public class TestEventListener  {
         return null;
     }
 
-    public Event postFoo(Event event)
-    {
+    public Event postFoo(Event event) {
         postFooInvoked = true;
         if (!preFooInvoked) {
             event.stopPropagation();

@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2021.
+ * This file is part of the com.labudzinski package.
+ * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
+ * @author Dominik Labudzinski <dominik@labudzinski.com>
+ *
+ */
+
 package com.labudzinski.eventdispatcher;
 
 import com.labudzinski.eventdispatcher.exceptions.InvalidArgumentException;
@@ -60,8 +68,7 @@ class GenericEventTest {
     }
 
     @Test
-    public void testSetArgument()
-    {
+    public void testSetArgument() {
         Event result = this.event.setArgument("foo2", "bar2");
         assertEquals(new HashMap<String, Object>() {{
             put("name", "Event");
@@ -97,8 +104,7 @@ class GenericEventTest {
     }
 
     @Test
-    public void testOffsetSet()
-    {
+    public void testOffsetSet() {
         this.event.setArgument("foo2", "bar2");
         assertEquals(new HashMap<String, Object>() {{
             put("name", "Event");
@@ -107,29 +113,25 @@ class GenericEventTest {
     }
 
     @Test
-    public void testOffsetUnset()
-    {
+    public void testOffsetUnset() {
         this.event.offsetUnset("name");
         assertEquals(this.event.getArguments(), new HashMap<String, Object>());
     }
 
     @Test
-    public void testOffsetIsset()
-    {
+    public void testOffsetIsset() {
         assertTrue(this.event.offsetExists("name"));
         assertFalse(this.event.offsetExists("nameNotExist"));
     }
 
     @Test
-    public void testHasArgument()
-    {
+    public void testHasArgument() {
         assertTrue(this.event.hasArgument("name"));
         assertFalse(this.event.hasArgument("nameNotExist"));
     }
 
     @Test
-    public void testGetSubject()
-    {
+    public void testGetSubject() {
         assertSame(this.subject, this.event.getSubject());
     }
 }
