@@ -1,7 +1,5 @@
 package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.eventdispatchercontracts.Event;
-
 public class TestEventListener  {
     public boolean preFooInvoked = false;
     public boolean postFooInvoked = false;

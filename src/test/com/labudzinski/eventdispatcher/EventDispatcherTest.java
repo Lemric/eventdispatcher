@@ -1,8 +1,6 @@
 package com.labudzinski.eventdispatcher;
 
 import com.labudzinski.eventdispatcher.events.Dispatcher;
-import com.labudzinski.eventdispatchercontracts.Event;
-import com.labudzinski.eventdispatchercontracts.EventListenerInterface;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

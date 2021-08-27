@@ -1,7 +1,7 @@
 package com.labudzinski.eventdispatcher.events;
 
-import com.labudzinski.eventdispatchercontracts.Event;
-import com.labudzinski.eventdispatchercontracts.EventDispatcherInterface;
+import com.labudzinski.eventdispatcher.Event;
+import com.labudzinski.eventdispatcher.EventDispatcherInterface;
 
 public class Dispatcher extends Event {
     private String name;

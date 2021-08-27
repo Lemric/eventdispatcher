@@ -8,11 +8,18 @@
 
 package com.labudzinski.eventdispatcher;
 
-@FunctionalInterface
-public interface StoppableEventInterface {
-    default boolean isPropagationStopped() {
-        return false;
+public class Event implements StoppableEventInterface {
+
+    private boolean propagationStopped = false;
+
+    @Override
+    public boolean isPropagationStopped() {
+        return this.propagationStopped;
     }
 
-    void stopPropagation();
+    @Override
+
+    public void stopPropagation() {
+        this.propagationStopped = true;
+    }
 }

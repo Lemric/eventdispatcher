@@ -1,9 +1,5 @@
 package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.eventdispatchercontracts.Event;
-import com.labudzinski.eventdispatchercontracts.EventDispatcherInterface;
-import com.labudzinski.eventdispatchercontracts.EventListenerInterface;
-
 import java.util.*;
 import java.util.Map.Entry;
 

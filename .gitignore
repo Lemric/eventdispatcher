@@ -1,3 +1,4 @@
 .idea/
-EventDispatcher.iml
+*.iml
 target/
+build/

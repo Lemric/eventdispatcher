@@ -1,7 +1,5 @@
 package com.labudzinski.eventdispatcher;
 
-import com.labudzinski.eventdispatchercontracts.Event;
-
 import java.util.function.Consumer;
 
 /**
