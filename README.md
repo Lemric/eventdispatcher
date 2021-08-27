@@ -6,7 +6,7 @@ dispatching and listening for events.
 [![Java CI with Maven](https://github.com/labudzinski/eventdispatcher/actions/workflows/maven.yml/badge.svg)](https://github.com/labudzinski/eventdispatcher/actions/workflows/maven.yml)
 [![CircleCI](https://circleci.com/gh/labudzinski/eventdispatcher/tree/master.svg?style=svg)](https://circleci.com/gh/labudzinski/eventdispatcher/tree/master)
 
-# Respurces
+# Resources
 ---------
 
 * [Documentation](https://github.com/labudzinski/labudzinski-docs/blob/master/EventDispatcher.md)
