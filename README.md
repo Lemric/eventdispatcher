@@ -11,5 +11,5 @@ dispatching and listening for events.
 
 * [Documentation](https://github.com/labudzinski/labudzinski-docs/blob/master/EventDispatcher.md)
 * [Report issues](https://github.com/labudzinski/eventdispatcher/issues) and
-  [send Pull Requests](https://github.com/slabudzinski/eventdispatcher/pulls)
+  [send Pull Requests](https://github.com/labudzinski/eventdispatcher/pulls)
   in the [main EvenrDispatcher repository](https://github.com/labudzinski/eventdispatcher)
