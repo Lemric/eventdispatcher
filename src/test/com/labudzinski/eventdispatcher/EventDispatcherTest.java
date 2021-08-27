@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2021.
- * This file is part of the com.labudzinski package.
- * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
- * @author Dominik Labudzinski <dominik@labudzinski.com>
- *
+ * Copyright (c) 2021-2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 package com.labudzinski.eventdispatcher;
@@ -200,6 +200,67 @@ class EventDispatcherTest {
         this.dispatcher.removeListener(preBar, listener);
         assertFalse(this.dispatcher.hasListeners(preBar));
         this.dispatcher.removeListener("notExists", listener);
+    }
+
+    @Test
+    public void testAddSubscriber() {
+        TestEventSubscriber eventSubscriber = new TestEventSubscriber();
+        this.dispatcher.addSubscriber(eventSubscriber);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertTrue(this.dispatcher.hasListeners(postFoo));
+    }
+
+    @Test
+    public void testAddSubscriberWithPriorities() {
+        EventSubscriberInterface eventSubscriber = new TestEventSubscriber();
+        this.dispatcher.addSubscriber(eventSubscriber);
+
+        eventSubscriber = new TestEventSubscriberWithPriorities();
+        this.dispatcher.addSubscriber(eventSubscriber);
+
+        List<EventListenerInterface> listeners = this.dispatcher.getListeners(preFoo);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertEquals(2, listeners.size());
+    }
+
+    @Test
+    public void testRemoveSubscriber() {
+        TestEventSubscriber eventSubscriber = new TestEventSubscriber();
+        this.dispatcher.addSubscriber(eventSubscriber);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertTrue(this.dispatcher.hasListeners(postFoo));
+        this.dispatcher.removeSubscriber(eventSubscriber);
+        assertFalse(this.dispatcher.hasListeners(preFoo));
+        assertFalse(this.dispatcher.hasListeners(postFoo));
+    }
+
+    @Test
+    public void testRemoveSubscriberWithPriorities() {
+        TestEventSubscriberWithPriorities eventSubscriber = new TestEventSubscriberWithPriorities();
+        this.dispatcher.addSubscriber(eventSubscriber);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        this.dispatcher.removeSubscriber(eventSubscriber);
+        assertFalse(this.dispatcher.hasListeners(preFoo));
+    }
+
+    @Test
+    public void testRemoveSubscriberWithMultipleListeners() {
+        EventSubscriberInterface eventSubscriber = new TestEventSubscriberWithMultipleListeners();
+        this.dispatcher.addSubscriber(eventSubscriber);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertEquals(2, this.dispatcher.getListeners(preFoo).size());
+        this.dispatcher.removeSubscriber(eventSubscriber);
+        assertFalse(this.dispatcher.hasListeners(preFoo));
+    }
+
+    @Test
+    public void testAddSubscriberWithMultipleListeners() {
+        EventSubscriberInterface eventSubscriber = new TestEventSubscriberWithMultipleListeners();
+        this.dispatcher.addSubscriber(eventSubscriber);
+
+        List<EventListenerInterface> listeners = this.dispatcher.getListeners(preFoo);
+        assertTrue(this.dispatcher.hasListeners(preFoo));
+        assertEquals(2, listeners.size());
     }
 
 
