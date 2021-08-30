@@ -6,7 +6,7 @@
  *  @author Dominik Labudzinski <dominik@labudzinski.com>
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
 import java.util.Map;
 

@@ -6,7 +6,7 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
 public class TestEventListener {
     public boolean preFooInvoked = false;

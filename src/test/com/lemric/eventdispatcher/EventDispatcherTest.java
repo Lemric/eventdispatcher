@@ -6,9 +6,9 @@
  *  @author Dominik Labudzinski <dominik@labudzinski.com>
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
-import com.labudzinski.eventdispatcher.events.Dispatcher;
+import com.lemric.eventdispatcher.events.Dispatcher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

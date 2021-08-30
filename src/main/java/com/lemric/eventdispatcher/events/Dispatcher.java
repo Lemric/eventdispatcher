@@ -6,10 +6,10 @@
  *
  */
 
-package com.labudzinski.eventdispatcher.events;
+package com.lemric.eventdispatcher.events;
 
-import com.labudzinski.eventdispatcher.Event;
-import com.labudzinski.eventdispatcher.EventDispatcherInterface;
+import com.lemric.eventdispatcher.Event;
+import com.lemric.eventdispatcher.EventDispatcherInterface;
 
 public class Dispatcher extends Event {
     private String name;

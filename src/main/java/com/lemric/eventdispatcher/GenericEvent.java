@@ -6,9 +6,9 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
-import com.labudzinski.eventdispatcher.exceptions.InvalidArgumentException;
+import com.lemric.eventdispatcher.exceptions.InvalidArgumentException;
 
 import java.util.HashMap;
 import java.util.Iterator;

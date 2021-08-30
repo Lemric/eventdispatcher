@@ -6,9 +6,9 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
-import com.labudzinski.eventdispatcher.exceptions.InvalidArgumentException;
+import com.lemric.eventdispatcher.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -6,10 +6,13 @@
  *
  */
 
-package com.labudzinski.eventdispatcher.exceptions;
+package com.lemric.eventdispatcher;
 
-public class BadMethodCallException extends Exception {
-    public BadMethodCallException(String message) {
-        super(message);
+@FunctionalInterface
+public interface StoppableEventInterface {
+    default boolean isPropagationStopped() {
+        return false;
     }
+
+    void stopPropagation();
 }

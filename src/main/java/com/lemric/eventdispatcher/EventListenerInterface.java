@@ -6,7 +6,7 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
 /**
  * A task that returns a result and may throw an exception. Implementors define a single method with no arguments called call.

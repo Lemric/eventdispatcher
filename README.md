@@ -1,4 +1,4 @@
-com.labudzinski.eventdispatcher
+Lemric Event Dispatcher
 =========================
 The EventDispatcher library provides tools that enable application components to communicate with each other by
 dispatching and listening for events.

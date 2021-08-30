@@ -6,7 +6,7 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
 public interface EventDispatcherInterface {
     /**

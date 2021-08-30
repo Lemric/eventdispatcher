@@ -6,7 +6,7 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
 import java.util.*;
 import java.util.Map.Entry;

@@ -6,9 +6,9 @@
  *
  */
 
-package com.labudzinski.eventdispatcher;
+package com.lemric.eventdispatcher;
 
-import com.labudzinski.eventdispatcher.events.Dispatcher;
+import com.lemric.eventdispatcher.events.Dispatcher;
 
 public class TestWithDispatcher {
     public String name;

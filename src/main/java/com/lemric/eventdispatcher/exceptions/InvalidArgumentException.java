@@ -6,7 +6,7 @@
  *
  */
 
-package com.labudzinski.eventdispatcher.exceptions;
+package com.lemric.eventdispatcher.exceptions;
 
 public class InvalidArgumentException extends Throwable {
     public InvalidArgumentException(String message) {
