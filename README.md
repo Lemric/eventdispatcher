@@ -9,7 +9,7 @@ dispatching and listening for events.
 # Resources
 ---------
 
-* [Documentation](https://github.com/labudzinski/labudzinski-docs/blob/master/EventDispatcher.md)
+* [Documentation](https://docs.lemric.com/eventdispatcher)
 * [Report issues](https://github.com/labudzinski/eventdispatcher/issues) and
   [send Pull Requests](https://github.com/labudzinski/eventdispatcher/pulls)
   in the [main EventDispatcher repository](https://github.com/labudzinski/eventdispatcher)
