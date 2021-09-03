@@ -153,7 +153,7 @@ public class EventDispatcher implements EventDispatcherInterface {
         }
     }
 
-    public void addSubscriber(EventSubscriberInterface subscriber) {
+    public void addSubscriber(EventSubscriberInterface<Event> subscriber) {
         subscriber.getSubscribedEvents().forEach((eventName, listeners) -> {
             listeners.forEach((listener, priority) -> {
                 this.addListener(eventName, listener, priority);
@@ -161,7 +161,7 @@ public class EventDispatcher implements EventDispatcherInterface {
         });
     }
 
-    public void removeSubscriber(EventSubscriberInterface subscriber) {
+    public void removeSubscriber(EventSubscriberInterface<Event> subscriber) {
         subscriber.getSubscribedEvents().forEach((eventName, listeners) -> {
             listeners.forEach((listener, priority) -> {
                 this.removeListener(eventName, listener);

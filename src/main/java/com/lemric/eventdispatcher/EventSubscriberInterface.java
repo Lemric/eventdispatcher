@@ -11,7 +11,7 @@ package com.lemric.eventdispatcher;
 import java.util.Map;
 
 @FunctionalInterface
-public interface EventSubscriberInterface {
+public interface EventSubscriberInterface<T> {
     /**
      * Returns an array of event names this subscriber wants to listen to.
      * <p>
@@ -31,5 +31,5 @@ public interface EventSubscriberInterface {
      *
      * @return array<string, mixed> The event names to listen to
      */
-    Map<String, Map<EventListenerInterface<Event>, Integer>> getSubscribedEvents();
+    Map<String, Map<EventListenerInterface<T>, Integer>> getSubscribedEvents();
 }
