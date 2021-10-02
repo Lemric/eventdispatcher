@@ -27,4 +27,4 @@ jobs:
       - name: Build
         run: mvn -B -DskipTests clean package
       - name: Test
-        run: mvn tesst
+        run: mvn test
