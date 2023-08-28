@@ -17,7 +17,7 @@ public class EventDispatcher implements EventDispatcherInterface {
 
     public <T extends Event> T dispatch(T event, String eventName) {
         List<EventListenerInterface> listeners = getListeners(eventName);
-        if (listeners.size() > 0) {
+        if (!listeners.isEmpty()) {
             for (EventListenerInterface listener : listeners) {
                 if (event.isPropagationStopped()) {
                     return event;
@@ -68,11 +68,11 @@ public class EventDispatcher implements EventDispatcherInterface {
     }
 
     public boolean hasListeners(String eventName) {
-        return listeners.get(eventName) != null && listeners.get(eventName).size() > 0;
+        return listeners.get(eventName) != null && !listeners.get(eventName).isEmpty();
     }
 
     public boolean hasListeners() {
-        return listeners.size() > 0;
+        return !listeners.isEmpty();
     }
 
     public List<EventListenerInterface> getListeners() {
